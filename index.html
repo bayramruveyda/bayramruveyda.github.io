@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Rüveyda Bayram · Portfolio</title>
+  <meta name="description" content="Rüveyda Bayram — Projeler, deneyim, eğitim ve sertifikalar." />
+  <!-- Font Awesome (ikonlar) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkfAMZ7ZyZg2Vx1hZ1Y0Q7mP3rKcKZl4Zf4Q3lR3xqG5m3kG7F0Z6xFeg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <style>
+    /* ====== Renkler / Değişkenler ====== */
+    :root{
+      --bg1:#8b5cf6; /* mor */
+      --bg2:#ec4899; /* pembe */
+      --bg3:#f59e0b; /* amber */
+      --text-on-dark:#ffffff;
+      --glass: rgba(255,255,255,0.18);
+      --glass-strong: rgba(255,255,255,0.28);
+      --border: rgba(255,255,255,0.35);
+      --shadow: 0 20px 50px rgba(0,0,0,.35);
+      --muted: rgba(255,255,255,.85);
+      --white:#fff;
+    }
+
+    /* ====== Global ====== */
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; font-family:Inter, system-ui, Segoe UI, Roboto, Arial, sans-serif;
+      color:var(--text-on-dark); line-height:1.6; overflow-x:hidden;
+    }
+
+    /* Arka plan (animasyonlu gradient) */
+    body::before{
+      content:""; position:fixed; inset:0; z-index:-3;
+      background: linear-gradient(-45deg, var(--bg1), var(--bg2), var(--bg3), var(--bg2));
+      background-size: 300% 300%;
+      animation: bgShift 22s ease infinite;
+    }
+    @keyframes bgShift{
+      0%{background-position:0% 50%}
+      50%{background-position:100% 50%}
+      100%{background-position:0% 50%}
+    }
+
+    /* Watermark (isim) */
+    body::after{
+      content:"Rüveyda Bayram";
+      position:fixed; bottom:8%; right:5%; z-index:-1;
+      font-weight:900; letter-spacing:2px;
+      font-size:min(14vw,140px);
+      color:rgba(255,255,255,0.05);
+      pointer-events:none; user-select:none;
+      white-space:nowrap;
+    }
+
+    /* Bubbles (yumuşak) */
+    .bubbles{position:fixed; inset:0; z-index:-2; pointer-events:none; overflow:hidden}
+    .bubble{
+      position:absolute; bottom:-120px; border-radius:50%;
+      background:radial-gradient(circle at 30% 30%, rgba(255,255,255,.45), rgba(255,255,255,.08) 60%, transparent 70%);
+      filter:blur(0.2px); opacity:.55; animation: rise linear infinite;
+    }
+    @keyframes rise{to{transform:translateY(-120vh) scale(1.1); opacity:.1}}
+    .bubble:nth-child(1){left:8%;  width:34px; height:34px; animation-duration:18s}
+    .bubble:nth-child(2){left:22%; width:22px; height:22px; animation-duration:14s}
+    .bubble:nth-child(3){left:38%; width:46px; height:46px; animation-duration:20s}
+    .bubble:nth-child(4){left:52%; width:28px; height:28px; animation-duration:15s}
+    .bubble:nth-child(5){left:67%; width:58px; height:58px; animation-duration:24s}
+    .bubble:nth-child(6){left:79%; width:18px; height:18px; animation-duration:12s}
+    .bubble:nth-child(7){left:90%; width:36px; height:36px; animation-duration:19s}
+
+    /* ====== Header / Nav ====== */
+    header{
+      position:sticky; top:0; z-index:10;
+      backdrop-filter:saturate(1.2) blur(14px);
+      background:linear-gradient(180deg, rgba(0,0,0,.18), rgba(0,0,0,.06));
+      border-bottom:1px solid rgba(255,255,255,.25);
+    }
+    .nav{max-width:1100px; margin:0 auto; padding:10px 16px; display:flex; align-items:center; justify-content:space-between; gap:12px}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; letter-spacing:.2px}
+    .logo{width:40px; height:40px; border-radius:12px; background:linear-gradient(135deg, #ffffff, #ffe4f0); color:#8b5cf6; display:grid; place-items:center; box-shadow:var(--shadow)}
+    .navlinks{display:flex; gap:8px; flex-wrap:wrap}
+    .navlinks a{padding:8px 12px; border-radius:10px; color:var(--white); text-decoration:none; font-weight:600}
+    .navlinks a.active, .navlinks a:hover{background:rgba(255,255,255,.14)}
+    .actions{display:flex; gap:8px}
+    .btn{
+      border:1px solid var(--border); background:var(--white); color:#5b21b6;
+      padding:9px 14px; border-radius:999px; cursor:pointer; font-weight:800;
+      box-shadow:var(--shadow); text-decoration:none; display:inline-block; transform:translateZ(0);
+    }
+    .btn.ghost{background:transparent; color:#fff}
+    .btn:hover{transform:translateY(-1px); filter:saturate(1.15)}
+
+    /* ====== Content / Views ====== */
+    .container{max-width:1100px; margin:0 auto; padding:22px}
+    .view{display:none; animation:.32s fade ease}
+    .view.active{display:block}
+    @keyframes fade{from{opacity:.15; transform:translateY(8px)} to{opacity:1; transform:none}}
+
+    /* ====== Cards / Chips ====== */
+    .cards{display:grid; grid-template-columns:repeat(auto-fit, minmax(260px,1fr)); gap:16px}
+    .card{background:var(--glass); border:1px solid var(--border); border-radius:16px; padding:16px; box-shadow:var(--shadow); overflow:hidden}
+    .chips{display:flex; flex-wrap:wrap; gap:8px}
+    .chip{font-size:12px; padding:6px 10px; border-radius:999px; background:var(--glass-strong); border:1px solid var(--border)}
+
+    /* ====== Hero ====== */
+    .hero{display:grid; grid-template-columns:1.2fr .8fr; gap:24px; align-items:center}
+    @media (max-width:900px){.hero{grid-template-columns:1fr}}
+    .title{font-size:clamp(28px,4.2vw,46px); line-height:1.1; margin:8px 0}
+    .subtitle{color:var(--muted)}
+    .lead{margin-top:6px; opacity:.95}
+    .hero-actions{display:flex; gap:10px; flex-wrap:wrap; margin-top:12px}
+    .socials{display:flex; gap:10px; margin-top:10px}
+    .socials a{background:rgba(255,255,255,.2); border:1px solid var(--border); padding:8px 12px; border-radius:999px; font-weight:700; text-decoration:none; color:#fff}
+    .socials a:hover{filter:saturate(1.15)}
+    .stats{display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:22px}
+    @media (max-width:800px){.stats{grid-template-columns:1fr}}
+    .stat-card{background:var(--glass); border:1px solid var(--border); border-radius:16px; padding:16px; box-shadow:var(--shadow); text-align:center}
+    .stat-num{font-size:clamp(24px,4vw,36px); font-weight:900}
+    .stat-label{opacity:.9}
+    .profile{border:1px solid var(--border); background:rgba(255,255,255,.2); padding:18px; border-radius:18px; box-shadow:var(--shadow); display:grid; gap:8px}
+
+    /* Profil foto */
+    .profile-photo{
+      display:grid; place-items:center; gap:10px; margin-bottom:12px;
+      background:rgba(255,255,255,.22); border:1px solid var(--border); border-radius:18px; padding:16px;
+    }
+    .profile-img{
+      width: 220px; height: 220px; border-radius: 50%; object-fit: cover;
+      box-shadow: var(--shadow); border: 4px solid var(--white);
+    }
+    .photo-caption{font-weight:700; opacity:.9}
+
+    /* ====== Timeline ====== */
+    .timeline{position:relative; display:grid; gap:12px}
+    .timeline::before{content:""; position:absolute; left:13px; top:0; bottom:0; width:2px; background:rgba(255,255,255,.35)}
+    .tl-item{position:relative; padding-left:42px}
+    .tl-item::before{
+      content:""; position:absolute; left:7px; top:10px; width:22px; height:22px; border-radius:50%;
+      display:grid; place-items:center; background:#ffd43b; color:#2b2b2b; font-size:12px; font-weight:900;
+      border:1px solid rgba(0,0,0,.05);
+    }
+    .tl-item.work::before{content:"\f0b1"; font-family:"Font Awesome 6 Free"; font-weight:900;} /* briefcase */
+    .tl-item.edu::before{content:"\f19d"; font-family:"Font Awesome 6 Free"; font-weight:900;}  /* graduation-cap */
+
+    footer{margin:28px 0; padding-top:18px; border-top:1px solid rgba(255,255,255,.25); color:var(--muted); font-size:14px}
+
+    /* ====== Modal ====== */
+    .modal{position:fixed; inset:0; display:none; place-items:center; background:rgba(0,0,0,.45); z-index:30; padding:16px}
+    .modal.active{display:grid}
+    .dialog{max-width:780px; width:100%; background:rgba(255,255,255,.92); color:#111; border-radius:16px; box-shadow:var(--shadow); overflow:hidden}
+    .dialog header{display:flex; justify-content:space-between; align-items:center; padding:14px 16px; background:linear-gradient(135deg, #fbcfe8, #e9d5ff); border-bottom:1px solid #e5e7eb}
+    .dialog .content{padding:16px}
+    .dialog footer{display:flex; gap:10px; justify-content:flex-end; padding:12px 16px; border-top:1px solid #e5e7eb}
+    .modal-cover{width:100%; border-radius:12px; margin-bottom:10px; border:1px solid #e5e7eb}
+
+    /* ====== Proje kapakları ====== */
+    .project-card{display:flex; flex-direction:column; gap:10px}
+    .cover{width:100%; aspect-ratio:16/9; border-radius:12px; overflow:hidden; border:1px solid var(--border); display:grid; place-items:center; margin-bottom:10px; background:rgba(255,255,255,.2)}
+    .cover img{width:100%; height:100%; object-fit:cover; display:block}
+    .cover .icon{font-size:42px; font-weight:900; letter-spacing:.5px; color:#3f1667; text-shadow:0 1px 0 rgba(255,255,255,.6)}
+    .grad-purple{background:linear-gradient(135deg,#f5d0fe,#dbeafe)}
+    .grad-blue{background:linear-gradient(135deg,#bae6fd,#e9d5ff)}
+    .grad-orange{background:linear-gradient(135deg,#fde68a,#fca5a5)}
+    .project-card:hover{transform:translateY(-2px); box-shadow:0 24px 50px rgba(0,0,0,.35); transition:.25s ease}
+  </style>
+</head>
+<body>
+  <!-- Bubbles -->
+  <div class="bubbles" aria-hidden="true">
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div><div class="bubble"></div><div class="bubble"></div>
+    <div class="bubble"></div>
+  </div>
+
+  <!-- Header -->
+  <header>
+    <div class="nav">
+      <div class="brand">
+        <div class="logo">RB</div>
+        <div>Rüveyda Bayram</div>
+      </div>
+      <nav class="navlinks">
+        <a href="#home" class="active">Ana Sayfa</a>
+        <a href="#projects">Projeler</a>
+        <a href="#experience">Deneyim</a>
+        <a href="#education">Eğitim</a>
+        <a href="#certs">Sertifikalar</a>
+        <a href="#contact">İletişim</a>
+      </nav>
+      <div class="actions">
+        <a class="btn" id="pdfBtn"><i class="fa-solid fa-file-pdf"></i> PDF</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main -->
+  <main class="container">
+    <!-- HOME -->
+    <section class="view active" id="home" data-page>
+      <div class="hero">
+        <div>
+          <h1 class="title">Merhaba, ben Rüveyda Bayram</h1>
+          <p class="subtitle">Bilgisayar Mühendisliği Öğrencisi</p>
+          <p class="lead">
+            Yazılım geliştirme yolculuğumda Java, Spring Boot ve PostgreSQL gibi teknolojilerle projeler geliştiriyorum. 
+            Hem backend hem de frontend tarafında kendimi geliştirmeye çalışıyorum.
+          </p>
+          <ul style="margin-top:10px; opacity:.95; list-style:none; padding:0">
+            <li>🚀 REST API geliştirme & veritabanı tasarımı</li>
+            <li>📊 PostgreSQL ile veri modelleme ve sorgulama</li>
+            <li>🌐 React ile temel web arayüzleri</li>
+          </ul>
+          <div class="hero-actions">
+            <a class="btn" href="#projects"><i class="fa-solid fa-folder-open"></i> Projelerime Göz At</a>
+            <a class="btn" href="CV.pdf" download><i class="fa-solid fa-download"></i> CV İndir (PDF)</a>
+          </div>
+          <div class="socials">
+            <a href="https://github.com/bayramruveyda" target="_blank" rel="noopener"><i class="fa-brands fa-github"></i> GitHub</a>
+            <a href="https://www.linkedin.com/in/r%C3%BCveyda-bayram-002b31348" target="_blank" rel="noopener"><i class="fa-brands fa-linkedin"></i> LinkedIn</a>
+          </div>
+          <div class="stats">
+            <div class="stat-card"><div class="stat-num" id="statCourses">0</div><div class="stat-label">Udemy Kursu</div></div>
+            <div class="stat-card"><div class="stat-num" id="statProjects">0</div><div class="stat-label">Proje</div></div>
+            <div class="stat-card"><div class="stat-num" id="statInternships">0</div><div class="stat-label">Staj</div></div>
+          </div>
+        </div>
+        <aside>
+          <!-- Profil Fotoğrafı Bloğu -->
+          <div class="profile-photo">
+            <img src="profil.jpg" alt="Rüveyda Bayram" class="profile-img" onerror="this.style.display='none'; this.closest('.profile-photo').style.display='none';"/>
+            <div class="photo-caption"><i class="fa-solid fa-user"></i> Merhaba! 👋</div>
+          </div>
+          <!-- Profil Bilgileri -->
+          <div class="profile">
+            <div><strong><i class="fa-solid fa-location-dot"></i> Konum:</strong> Türkiye</div>
+            <div><strong><i class="fa-solid fa-envelope"></i> Email:</strong> <a href="mailto:ruveydabayram2003@gmail.com">ruveydabayram2003@gmail.com</a></div>
+            <div><strong><i class="fa-solid fa-phone"></i> Telefon:</strong> <a href="tel:905531634787">+90 553 163 47 87</a> · <a href="https://wa.me/905531634787" target="_blank" rel="noopener">WhatsApp</a></div>
+            <div><strong><i class="fa-brands fa-github"></i> GitHub:</strong> <a href="https://github.com/bayramruveyda" target="_blank" rel="noopener">github.com/bayramruveyda</a></div>
+            <div><strong><i class="fa-brands fa-linkedin"></i> LinkedIn:</strong> <a href="https://www.linkedin.com/in/r%C3%BCveyda-bayram-002b31348" target="_blank" rel="noopener">linkedin.com/in/rüveyda-bayram</a></div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <!-- PROJECTS -->
+    <section class="view" id="projects" data-page>
+      <h2>Projeler</h2>
+      <div class="cards" id="projectGrid"></div>
+    </section>
+
+    <!-- EXPERIENCE -->
+    <section class="view" id="experience" data-page>
+      <h2>Deneyim</h2>
+      <div class="timeline">
+        <div class="card tl-item work">
+          <div style="display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap">
+            <strong>Stajyer · BTK</strong>
+            <span class="subtitle">2025 — Güncel</span>
+          </div>
+          <ul>
+            <li>Restoran Yönetim Sistemi (sipariş, stok, raporlar, JWT, WebSocket)</li>
+            <li>Kişisel CV sitesi (tema/dil geçişi, PDF export)</li>
+            <li>GitHub ile iş birliği ve kod gözden geçirme</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- EDUCATION -->
+    <section class="view" id="education" data-page>
+      <h2>Eğitim</h2>
+      <div class="timeline">
+        <div class="card tl-item edu">
+          <strong>Karabük Üniversitesi – Bilgisayar Mühendisliği</strong>
+          <div class="subtitle">2023–2027</div>
+        </div>
+        <div class="card tl-item edu">
+          <strong>Karabük Üniversitesi – Yabancı Diller Yüksekokulu</strong>
+          <div class="subtitle">2022–2023</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CERTIFICATES -->
+    <section class="view" id="certs" data-page>
+      <h2>Sertifikalar & Kurslar</h2>
+      <div class="cards" id="certGrid"></div>
+    </section>
+
+    <!-- CONTACT -->
+    <section class="view" id="contact" data-page>
+      <h2>İletişim</h2>
+      <div class="cards">
+        <div class="card">
+          <p><strong><i class="fa-solid fa-envelope"></i> Email:</strong> <a href="mailto:ruveydabayram2003@gmail.com">ruveydabayram2003@gmail.com</a></p>
+          <p><strong><i class="fa-solid fa-phone"></i> Telefon:</strong> <a href="tel:905531634787">+90 553 163 47 87</a> · <a href="https://wa.me/905531634787" target="_blank" rel="noopener">WhatsApp</a></p>
+          <p><strong><i class="fa-brands fa-github"></i> GitHub:</strong> <a href="https://github.com/bayramruveyda" target="_blank" rel="noopener">github.com/bayramruveyda</a></p>
+          <p><strong><i class="fa-brands fa-linkedin"></i> LinkedIn:</strong> <a href="https://www.linkedin.com/in/r%C3%BCveyda-bayram-002b31348" target="_blank" rel="noopener">linkedin.com/in/rüveyda-bayram</a></p>
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      © <span id="yil"></span> Rüveyda Bayram · <span class="muted">Tüm hakları saklıdır.</span>
+    </footer>
+  </main>
+
+  <!-- PROJECT/CERT MODAL -->
+  <div class="modal" id="modal">
+    <div class="dialog">
+      <header>
+        <h3 id="modalTitle">Detay</h3>
+        <button class="btn" id="closeModal">Kapat</button>
+      </header>
+      <div class="content">
+        <img id="modalImg" class="modal-cover" alt="Görsel" style="display:none" />
+        <p id="modalDesc"></p>
+        <div class="chips" id="modalTags"></div>
+      </div>
+      <footer id="modalCtas"></footer>
+    </div>
+  </div>
+
+  <script>
+    /* ====== Router (hash tab) ====== */
+    const views = [...document.querySelectorAll('[data-page]')];
+    function render(route){
+      const id = (route && route.startsWith('#')) ? route.slice(1) : 'home';
+      views.forEach(v => v.classList.toggle('active', v.id === id));
+      document.querySelectorAll('.navlinks a').forEach(a => a.classList.toggle('active', a.getAttribute('href') === `#${id}`));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    window.addEventListener('hashchange', () => render(location.hash));
+    render(location.hash || '#home');
+
+    /* ====== PDF & Yıl ====== */
+    document.getElementById('pdfBtn').addEventListener('click', () => window.print());
+    document.getElementById('yil').textContent = new Date().getFullYear();
+
+    /* ====== Sertifikalar (Udemy) ====== */
+    const certs = [
+      {
+        title:'110+ Saatlik C Programlama ve C# ile Yazılımcı Olma Kursu',
+        provider:'Udemy', instructors:'Can Boz',
+        tags:['C','C#','Algoritmalar'],
+        coverClass:'grad-orange', icon:'C#',
+        detail:'110+ saatlik içerik: C ve C# temelleri, algoritmalar ve pratik uygulamalar.'
+      },
+      {
+        title:'(42 Saat) Sıfırdan Komple Java Geliştirici Kursu',
+        provider:'Udemy', instructors:'Mustafa Murat Coşkun · Ankyra Analytics',
+        tags:['Java','OOP','Collections'],
+        coverClass:'grad-purple', icon:'Java',
+        detail:'Sıfırdan Java: OOP, koleksiyonlar, dosya işlemleri ve proje pratiği.'
+      },
+      {
+        title:'(40+ Saat) Python | Sıfırdan İleri Seviye Programlama (2020)',
+        provider:'Udemy', instructors:'Mustafa Murat Coşkun · Ankyra Analytics',
+        tags:['Python','Veri Yapıları','İleri Seviye'],
+        coverClass:'grad-blue', icon:'Py',
+        detail:'Python temellerinden ileri konulara: veri yapıları, dosya işlemleri ve daha fazlası.'
+      }
+    ];
+    const certGrid = document.getElementById('certGrid');
+    certs.forEach((c,idx)=>{
+      const card = document.createElement('article'); card.className='card';
+      card.innerHTML = `
+        <div class="cover ${c.coverClass}"><div class="icon">${c.icon}</div></div>
+        <h3>${c.title}</h3>
+        <p class="subtitle">${c.provider} · ${c.instructors}</p>
+        <div class="chips">${c.tags.map(t=>`<span class='chip'>${t}</span>`).join('')}</div>
+        <div style="margin-top:10px">
+          <a class="btn" href="javascript:void(0)" data-open-cert="${idx}">Detay</a>
+        </div>`;
+      certGrid.appendChild(card);
+    });
+
+    /* ====== Projeler ====== */
+    const projects = [
+      {
+        title:'🍽 Restoran Yönetim Sistemi',
+        desc:'Sipariş alma, stok takibi, raporlama ve JWT & WebSocket ile gerçek zamanlı bildirimler.',
+        tags:['Java','Spring Boot','PostgreSQL','React','JWT','WebSocket'],
+        coverClass:'grad-purple', icon:'🍽',
+        img:'restoran.png',
+        links:[{label:'GitHub', href:'https://github.com/bayramruveyda', emoji:'🐙'}]
+      },
+      {
+        title:'🧑‍💻 Kişisel CV Web Sitesi',
+        desc:'Single-page geçişler, canlı arka plan, modal detaylar, PDF çıktısı.',
+        tags:['HTML','CSS','JavaScript','Responsive'],
+        coverClass:'grad-blue', icon:'🧑‍💻',
+        img:'cvsite.png',
+        links:[{label:'Demo', href:'#', emoji:'🌐'}]
+      }
+    ];
+    const grid = document.getElementById('projectGrid');
+    projects.forEach((p,idx)=>{
+      const card = document.createElement('article'); card.className='card project-card';
+      const coverHTML = p.img
+        ? `<div class="cover"><img src="${p.img}" alt="${p.title}" onerror="this.remove(); const f=this.parentElement; f.classList.add('${p.coverClass}'); f.innerHTML='<div class=\'icon\'>${p.icon}</div>';" /></div>`
+        : `<div class="cover ${p.coverClass}"><div class="icon">${p.icon}</div></div>`;
+      card.innerHTML = `
+        ${coverHTML}
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+        <div class="chips">${p.tags.map(t=>`<span class='chip'>${t}</span>`).join('')}</div>
+        <div style="margin-top:10px; display:flex; gap:8px; flex-wrap:wrap">
+          <a class="btn" href="javascript:void(0)" data-open="${idx}">Detay</a>
+          ${p.links.map(l=>`<a class="btn" href="${l.href}" target="_blank" rel="noopener">${l.emoji} ${l.label}</a>`).join('')}
+        </div>`;
+      grid.appendChild(card);
+    });
+
+    /* ====== Ana sayfa istatistikleri ====== */
+    const statCourses=document.getElementById('statCourses');
+    const statProjects=document.getElementById('statProjects');
+    const statInternships=document.getElementById('statInternships');
+    if(statCourses) statCourses.textContent = certs.length + '+';
+    if(statProjects) statProjects.textContent = projects.length + '+';
+    if(statInternships) statInternships.textContent = '1';
+
+    /* ====== Modal Mantığı ====== */
+    const modal = document.getElementById('modal');
+    const closeModal = document.getElementById('closeModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalDesc  = document.getElementById('modalDesc');
+    const modalTags  = document.getElementById('modalTags');
+    const modalCtas  = document.getElementById('modalCtas');
+    const modalImg   = document.getElementById('modalImg');
+
+    document.addEventListener('click', (e)=>{
+      // Proje detay
+      const pBtn = e.target.closest('[data-open]');
+      if(pBtn){
+        const p = projects[Number(pBtn.getAttribute('data-open'))];
+        modalTitle.textContent = p.title;
+        modalDesc.textContent  = p.desc;
+        modalTags.innerHTML    = p.tags.map(t=>`<span class='chip'>${t}</span>`).join('');
+        modalCtas.innerHTML    = p.links.map(l=>`<a class='btn' href='${l.href}' target='_blank' rel='noopener'>${l.emoji} ${l.label}</a>`).join('') + `<a class='btn' href='javascript:void(0)' id='closeModal2'>Kapat</a>`;
+        if(modalImg){ 
+          if(p.img){ modalImg.src = p.img; modalImg.style.display='block'; modalImg.alt = p.title; }
+          else { modalImg.style.display='none'; }
+        }
+        modal.classList.add('active');
+      }
+      // Sertifika detay
+      const cBtn = e.target.closest('[data-open-cert]');
+      if(cBtn){
+        const c = certs[Number(cBtn.getAttribute('data-open-cert'))];
+        modalTitle.textContent = c.title;
+        modalDesc.textContent  = c.detail;
+        modalTags.innerHTML    = c.tags.map(t=>`<span class='chip'>${t}</span>`).join('');
+        modalCtas.innerHTML    = `<a class='btn' href='javascript:void(0)' id='closeModal2'>Kapat</a>`;
+        if(modalImg){ modalImg.style.display='none'; }
+        modal.classList.add('active');
+      }
+      // Modal kapatma (arka plan)
+      if(e.target === modal){ modal.classList.remove('active'); }
+      // Modal içinden kapat
+      if(e.target && e.target.id === 'closeModal2'){ modal.classList.remove('active'); }
+    });
+    closeModal.addEventListener('click',()=> modal.classList.remove('active'));
+  </script>
+</body>
+</html>
